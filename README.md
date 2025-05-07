@@ -1,16 +1,28 @@
-# my_productive_rewards
+# My Productivity Rewards
 
-A new Flutter project.
+A productivity reward app for household chores and undesirable tasks.
 
-## Getting Started
+* Create tasks and assign point values to them
+* Log task completion
+* Add custom rewards
+* Set a current point goal
+* Spend points towards a chosen reward
 
-This project is a starting point for a Flutter application.
+All data is stored locally on the device using SQFLite. Data can be manually cleared from the settings page.
 
-A few resources to get you started if this is your first Flutter project:
+## Supported Platforms
+- Android
+- iOS
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+1. Install Flutter SDK: [Installation Guide](https://flutter.dev/docs/get-started/install)
+2. Clone the repository:
+  ``` git clone https://github.com/sydrichards31/my-productivity-rewards.git ```
+3. Navigate to the project folder and install dependencies:
+  
+```
+  cd my_productive_rewards
+  flutter pub get
+```
+4. Run the app on your desired platform (for iOS ensure Xcode is installed):
+   ``` flutter run ```

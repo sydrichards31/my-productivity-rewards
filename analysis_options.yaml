@@ -1,0 +1,112 @@
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  # The lint rules applied to this project can be customized in the
+  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
+  # included above or to enable additional rules. A list of all available lints
+  # and their documentation is published at
+  # https://dart-lang.github.io/linter/lints/index.html.
+  #
+  # Instead of disabling a lint rule for the entire project in the
+  # section below, it can also be suppressed for a single line of code
+  # or a specific dart file by using the `// ignore: name_of_lint` and
+  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
+  # producing the lint.
+  rules:
+    always_declare_return_types: true
+    always_use_package_imports: true
+    avoid_bool_literals_in_conditional_expressions: true
+    avoid_catching_errors: true
+    avoid_dynamic_calls: true
+    avoid_escaping_inner_quotes: true
+    avoid_field_initializers_in_const_classes: true
+    avoid_final_parameters: true
+    avoid_implementing_value_types: true
+    avoid_multiple_declarations_per_line: true
+    avoid_private_typedef_functions: true
+    avoid_redundant_argument_values: true
+    avoid_setters_without_getters: true
+    avoid_type_to_string: true
+    avoid_unused_constructor_parameters: true
+    avoid_void_async: true
+    cancel_subscriptions: true
+    cast_nullable_to_non_nullable: true
+    conditional_uri_does_not_exist: true
+    constant_identifier_names: true
+    collection_methods_unrelated_type: true
+    deprecated_consistency: true
+    directives_ordering: true
+    eol_at_end_of_file: true
+    join_return_with_assignment: true
+    leading_newlines_in_multiline_strings: true
+    missing_whitespace_between_adjacent_strings: true
+    no_adjacent_strings_in_list: true
+    no_runtimeType_toString: true
+    noop_primitive_operations: true
+    parameter_assignments: true
+    prefer_asserts_in_initializer_lists: true
+    prefer_constructors_over_static_methods: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    prefer_if_elements_to_conditional_expressions: true
+    prefer_null_aware_method_calls: true
+    require_trailing_commas: true
+    secure_pubspec_urls: true
+    sized_box_shrink_expand: true
+    sort_pub_dependencies: true
+    sort_unnamed_constructors_first: true
+    test_types_in_equals: true
+    throw_in_finally: true
+    tighten_type_of_initializing_formals: true
+    type_annotate_public_apis: true
+    unnecessary_await_in_return: true
+    unnecessary_null_checks: true
+    unnecessary_parenthesis: true
+    unnecessary_raw_strings: true
+    unnecessary_statements: true
+    use_colored_box: true
+    use_decorated_box: true
+    use_enums: true
+    use_is_even_rather_than_modulo: true
+    use_named_constants: true
+    use_late_for_private_fields_and_variables: true
+    use_setters_to_change_properties: true
+    use_string_buffers: true
+    use_super_parameters: true
+    use_test_throws_matchers: true
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+
+analyzer:
+  language:
+    # do not allow implicit casting from dynamic types
+    strict-casts: true
+
+  errors:
+    # treat missing required parameters as an error (not a hint)
+    missing_required_param: error
+
+    # treat missing returns as an error (not a hint)
+    missing_return: error
+
+    # allow having TODOs in code
+    todo: ignore
+
+    # Reassignment should be treated as warning (not a hint)
+    parameter_assignments: warning
+
+  exclude:
+    - lib/**/*.mocks.dart
+    - lib/*.mocks.dart
+    - lib/**/*.g.dart
+    - lib/generated_plugin_registrant.dart
