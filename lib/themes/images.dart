@@ -10,4 +10,6 @@ class Images {
   String get calendar => '${Images._path}calendar.svg';
   String get buy => '${Images._path}buy.svg';
   String get goal => '${Images._path}goal.svg';
+  String get chevronDown => '${Images._path}chevronDown.svg';
+  String get chevronUp => '${Images._path}chevronUp.svg';
 }

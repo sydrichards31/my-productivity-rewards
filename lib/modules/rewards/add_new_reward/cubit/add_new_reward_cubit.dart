@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:my_productive_rewards/models/reward.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
 import 'package:my_productive_rewards/services/persistent_storage_service.dart';
 import 'package:my_productive_rewards/utils/utils.dart';
@@ -68,6 +68,7 @@ class AddNewRewardCubit extends Cubit<AddNewRewardState> {
   }
 
   Future<void> addReward() async {
+    emit(state.copyWith(status: AddNewRewardStatus.addingReward));
     try {
       if (state.isGoal == 1) {
         await _persistentStorageService.setString(

@@ -1,8 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_productive_rewards/models/purchased_reward.dart';
-import 'package:my_productive_rewards/models/reward.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/rewards/rewards_filter_tab.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
 import 'package:my_productive_rewards/services/persistent_storage_service.dart';

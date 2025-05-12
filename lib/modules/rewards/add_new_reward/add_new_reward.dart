@@ -13,7 +13,12 @@ class AddNewReward extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AddNewRewardCubit>(
       create: (_) => AddNewRewardCubit(),
-      child: BlocBuilder<AddNewRewardCubit, AddNewRewardState>(
+      child: BlocConsumer<AddNewRewardCubit, AddNewRewardState>(
+        listener: (context, state) {
+          if (state.status == AddNewRewardStatus.success) {
+            Navigator.pop(context, true);
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<AddNewRewardCubit>();
           return Dialog(
@@ -22,7 +27,7 @@ class AddNewReward extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(
-                height: 400,
+                height: state.status == AddNewRewardStatus.failure ? 420 : 400,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -125,13 +130,12 @@ class AddNewReward extends StatelessWidget {
                           onPressed: state.addEnabled
                               ? () async {
                                   await cubit.addReward();
-                                  if (context.mounted) {
-                                    Navigator.pop(context, true);
-                                  }
                                 }
                               : null,
                         ),
                       ),
+                      if (state.status == AddNewRewardStatus.failure)
+                        MPRFailureText(text: 'Failed to add reward'),
                     ],
                   ),
                 ),

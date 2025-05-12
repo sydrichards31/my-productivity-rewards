@@ -37,19 +37,6 @@ class SettingsCubit extends Cubit<SettingsState> {
     }
   }
 
-  Future<void> goalPointsChanged() async {
-    await _persistentStorageService.setString(
-      PersistentStorageService.goalPointsKey,
-      goalPointsTextController.text,
-    );
-    emit(
-      state.copyWith(
-        goalPoints: goalPointsTextController.text,
-        status: SettingsStatus.goalPointsChanged,
-      ),
-    );
-  }
-
   Future<void> clearTasks() async {
     await _databaseService.deleteAllTasks();
     emit(state.copyWith(status: SettingsStatus.tasksCleared));
@@ -66,6 +53,14 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> clearPurchasedRewards() async {
+    await _databaseService.deleteAllTasks();
+    await _databaseService.deleteAllCompletedTasks();
+    await _databaseService.deleteAllRewards();
+    await _databaseService.deleteAllPurchasedRewards();
+    emit(state.copyWith(status: SettingsStatus.allDataCleared));
+  }
+
+  Future<void> clearAllData() async {
     await _databaseService.deleteAllPurchasedRewards();
     emit(state.copyWith(status: SettingsStatus.purchasedRewardsCleared));
   }

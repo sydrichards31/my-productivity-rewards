@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_productive_rewards/models/reward.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
 import 'package:my_productive_rewards/services/persistent_storage_service.dart';
 import 'package:my_productive_rewards/utils/utils.dart';
@@ -74,6 +74,7 @@ class EditRewardCubit extends Cubit<EditRewardState> {
   }
 
   Future<void> updateReward(int id) async {
+    emit(state.copyWith(status: EditRewardStatus.updatingReward));
     try {
       final goalChanged = state.isGoal != _originalReward.isGoal;
       if (goalChanged) {

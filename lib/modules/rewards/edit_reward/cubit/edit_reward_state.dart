@@ -47,7 +47,7 @@ enum EditRewardStatus {
   valueChanged,
   linkChanged,
   isGoalChanged,
-  addingReward,
+  updatingReward,
   success,
   failure,
 }

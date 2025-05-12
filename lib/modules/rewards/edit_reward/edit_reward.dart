@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_productive_rewards/components/components.dart';
-import 'package:my_productive_rewards/models/reward.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/rewards/edit_reward/cubit/edit_reward_cubit.dart';
 import 'package:my_productive_rewards/services/navigation_service.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
@@ -15,7 +15,12 @@ class EditReward extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<EditRewardCubit>(
       create: (_) => EditRewardCubit(reward: reward),
-      child: BlocBuilder<EditRewardCubit, EditRewardState>(
+      child: BlocConsumer<EditRewardCubit, EditRewardState>(
+        listener: (context, state) {
+          if (state.status == EditRewardStatus.success) {
+            Navigator.pop(context, true);
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<EditRewardCubit>();
           return Dialog(
@@ -24,7 +29,7 @@ class EditReward extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(
-                height: 405,
+                height: state.status == EditRewardStatus.failure ? 425 : 405,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -135,6 +140,8 @@ class EditReward extends StatelessWidget {
                               : null,
                         ),
                       ),
+                      if (state.status == EditRewardStatus.failure)
+                        MPRFailureText(text: 'Failed to update reward'),
                     ],
                   ),
                 ),

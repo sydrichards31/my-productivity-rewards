@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
-import 'package:my_productive_rewards/models/completed_task.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/settings/settings.dart';
 import 'package:my_productive_rewards/modules/task_log/cubit/task_log_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
-import 'package:my_productive_rewards/utils/utils.dart';
+
+const List<String> sortByValues = ['Sort By:   Date', 'Sort By:   A to Z'];
 
 class TaskLog extends StatelessWidget {
   const TaskLog({super.key});
@@ -21,24 +22,18 @@ class TaskLog extends StatelessWidget {
             bodyWidget = Center(child: MPRLoader.circular());
           } else if (state.status == TaskLogStatus.failure) {
             bodyWidget = Center(child: Text('Unable to load data'));
-          } else if ((state.status == TaskLogStatus.loaded ||
-                  state.status == TaskLogStatus.tasksUpdated) &&
-              state.tasks.isNotNullOrEmpty) {
+          } else if (state.tasks.isEmpty) {
+            bodyWidget = Center(
+              child: Text(
+                'No rewards saved',
+                style: MPRTextStyles.large,
+              ),
+            );
+          } else {
             bodyWidget = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 12.0,
-                    right: 12,
-                    bottom: 12,
-                    top: 20,
-                  ),
-                  child: Text(
-                    'Task Log',
-                    style: MPRTextStyles.extraLargeSemiBold,
-                  ),
-                ),
+                _Header(state: state),
                 _MyTasks(tasks: state.tasks),
               ],
             );
@@ -67,6 +62,68 @@ class TaskLog extends StatelessWidget {
   }
 }
 
+class _Header extends StatelessWidget {
+  final TaskLogState state;
+  const _Header({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<TaskLogCubit>();
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Task Log',
+            style: MPRTextStyles.extraLargeSemiBold,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8, top: 4),
+            child: Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: ColorPalette.gunmetal.shade100),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  height: 32,
+                  width: 32,
+                  child: Center(
+                    child: IconButton(
+                      visualDensity: VisualDensity.compact,
+                      splashRadius: 20,
+                      padding: EdgeInsets.zero,
+                      onPressed: () => cubit.sortDirectionChanged(),
+                      icon: Icon(
+                        state.sortDirection == SortDirection.desc
+                            ? Icons.arrow_downward
+                            : Icons.arrow_upward,
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                SizedBox(
+                  width: 148,
+                  height: 42,
+                  child: MPRDropdown(
+                    value: 'Sort By:   ${state.filterBy}',
+                    values: sortByValues,
+                    onValueChanged: (filter) => cubit.filterByChanged(filter),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _MyTasks extends StatelessWidget {
   final List<CompletedTask> tasks;
   const _MyTasks({required this.tasks});
@@ -74,49 +131,53 @@ class _MyTasks extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          final task = tasks[index];
-          return ColoredBox(
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MPRDivider(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 8,
+      child: RefreshIndicator(
+        color: ColorPalette.green,
+        onRefresh: () => context.read<TaskLogCubit>().initializeTaskLog(),
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            final task = tasks[index];
+            return ColoredBox(
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MPRDivider(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 8,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              task.description,
+                              style: MPRTextStyles.largeSemiBold,
+                            ),
+                            Text(
+                              task.date,
+                              style: MPRTextStyles.regular,
+                            ),
+                          ],
+                        ),
+                        Text(
+                          '${task.points} pts',
+                          style: MPRTextStyles.regularSemiBold,
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            task.description,
-                            style: MPRTextStyles.largeSemiBold,
-                          ),
-                          Text(
-                            task.date,
-                            style: MPRTextStyles.regular,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        '${task.points} pts',
-                        style: MPRTextStyles.regularSemiBold,
-                      ),
-                    ],
-                  ),
-                ),
-                if (index == tasks.length - 1) const MPRDivider(),
-              ],
-            ),
-          );
-        },
-        itemCount: tasks.length,
+                  if (index == tasks.length - 1) const MPRDivider(),
+                ],
+              ),
+            );
+          },
+          itemCount: tasks.length,
+        ),
       ),
     );
   }

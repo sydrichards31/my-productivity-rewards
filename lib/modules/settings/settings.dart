@@ -25,15 +25,6 @@ class Settings extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MPRDivider(),
-                    MPRTextField.filled(
-                      label: 'Current Goal Points',
-                      keyboardType:
-                          TextInputType.numberWithOptions(signed: true),
-                      controller: cubit.goalPointsTextController,
-                      whiteFill: true,
-                      onEditingComplete: () => cubit.goalPointsChanged(),
-                    ),
-                    MPRDivider(),
                     MPRSingleLineItem(
                       text: 'Clear All Tasks',
                       iconOnRight: false,
@@ -101,6 +92,24 @@ class Settings extends StatelessWidget {
                         );
                         if (result && context.mounted) {
                           cubit.clearPurchasedRewards();
+                        }
+                      },
+                      horizontalPadding: 16,
+                    ),
+                    MPRDivider(),
+                    MPRSingleLineItem(
+                      text: 'Clear All Data',
+                      iconOnRight: false,
+                      textStyleOverride: MPRTextStyles.regularSemiBold
+                          .copyWith(color: Colors.red),
+                      onPressed: () async {
+                        final result = await _showClearConfirmationDialog(
+                          context,
+                          'clear all data',
+                          'Clear All Data',
+                        );
+                        if (result && context.mounted) {
+                          cubit.clearAllData();
                         }
                       },
                       horizontalPadding: 16,

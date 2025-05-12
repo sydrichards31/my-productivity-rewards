@@ -33,5 +33,6 @@ enum SettingsStatus {
   taskLogCleared,
   rewardsCleared,
   purchasedRewardsCleared,
+  allDataCleared,
   failure,
 }

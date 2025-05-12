@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
-import 'package:my_productive_rewards/models/task.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/dashboard/edit_task/cubit/edit_task_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 
@@ -13,7 +13,14 @@ class EditTask extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<EditTaskCubit>(
       create: (_) => EditTaskCubit(task: task),
-      child: BlocBuilder<EditTaskCubit, EditTaskState>(
+      child: BlocConsumer<EditTaskCubit, EditTaskState>(
+        listener: (context, state) {
+          if (state.status == EditTaskStatus.deleteTaskSuccess) {
+            Navigator.pop(context, false);
+          } else if (state.status == EditTaskStatus.updateTaskSuccess) {
+            Navigator.pop(context, true);
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<EditTaskCubit>();
           return Dialog(
@@ -22,7 +29,7 @@ class EditTask extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(
-                height: state.status == EditTaskStatus.failure ? 380 : 360,
+                height: state.failureStatus ? 380 : 360,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -86,11 +93,7 @@ class EditTask extends StatelessWidget {
                           onPressed:
                               (state.updateEnabled && task.taskId != null)
                                   ? () async {
-                                      final result =
-                                          await cubit.updateTask(task.taskId!);
-                                      if (context.mounted && result) {
-                                        Navigator.pop(context, true);
-                                      }
+                                      await cubit.updateTask(task.taskId!);
                                     }
                                   : null,
                         ),
@@ -103,20 +106,14 @@ class EditTask extends StatelessWidget {
                           hasHorizontalPadding: false,
                           text: 'Delete Task',
                           onPressed: () async {
-                            cubit.deleteTask(task.taskId!);
-                            Navigator.pop(context, false);
+                            await cubit.deleteTask(task.taskId!);
                           },
                         ),
                       ),
-                      if (state.status == EditTaskStatus.failure)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 6.0),
-                          child: Text(
-                            'Failed to update task',
-                            style: MPRTextStyles.regular
-                                .copyWith(color: ColorPalette.red),
-                          ),
-                        ),
+                      if (state.status == EditTaskStatus.deleteTaskFailure)
+                        MPRFailureText(text: 'Failed to delete task'),
+                      if (state.status == EditTaskStatus.updateTaskFailure)
+                        MPRFailureText(text: 'Failed to update task'),
                     ],
                   ),
                 ),

@@ -11,7 +11,12 @@ class AddNewTask extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AddNewTaskCubit>(
       create: (_) => AddNewTaskCubit(),
-      child: BlocBuilder<AddNewTaskCubit, AddNewTaskState>(
+      child: BlocConsumer<AddNewTaskCubit, AddNewTaskState>(
+        listener: (context, state) {
+          if (state.status == AddNewTaskStatus.success) {
+            Navigator.pop(context, true);
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<AddNewTaskCubit>();
           return Dialog(
@@ -83,23 +88,13 @@ class AddNewTask extends StatelessWidget {
                           text: 'Save and Close',
                           onPressed: state.addEnabled
                               ? () async {
-                                  final result = await cubit.addTask();
-                                  if (context.mounted && result) {
-                                    Navigator.pop(context, true);
-                                  }
+                                  await cubit.addTask();
                                 }
                               : null,
                         ),
                       ),
                       if (state.status == AddNewTaskStatus.failure)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Text(
-                            'Failed to add task',
-                            style: MPRTextStyles.regular
-                                .copyWith(color: ColorPalette.red),
-                          ),
-                        ),
+                        MPRFailureText(text: 'Failed to add task'),
                     ],
                   ),
                 ),

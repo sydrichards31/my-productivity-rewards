@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:my_productive_rewards/models/completed_task.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
 import 'package:my_productive_rewards/services/persistent_storage_service.dart';
 
@@ -44,6 +44,7 @@ class AddCompletedTaskCubit extends Cubit<AddCompletedTaskState> {
 
   Future<void> addCompletedTask() async {
     try {
+      emit(state.copyWith(status: AddCompletedTaskStatus.addingTask));
       await _databaseService.addCompletedTask(
         CompletedTask(
           description: _description,
@@ -59,7 +60,6 @@ class AddCompletedTaskCubit extends Cubit<AddCompletedTaskState> {
         PersistentStorageService.pointsKey,
         newPoints.toString(),
       );
-
       emit(state.copyWith(status: AddCompletedTaskStatus.success));
     } catch (_) {
       emit(state.copyWith(status: AddCompletedTaskStatus.failure));

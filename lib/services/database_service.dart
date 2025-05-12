@@ -1,7 +1,4 @@
-import 'package:my_productive_rewards/models/completed_task.dart';
-import 'package:my_productive_rewards/models/purchased_reward.dart';
-import 'package:my_productive_rewards/models/reward.dart';
-import 'package:my_productive_rewards/models/task.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 

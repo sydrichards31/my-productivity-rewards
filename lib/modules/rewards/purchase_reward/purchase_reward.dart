@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
-import 'package:my_productive_rewards/models/reward.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/rewards/purchase_reward/cubit/purchase_reward_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 import 'package:my_productive_rewards/utils/utils.dart';
@@ -23,7 +23,12 @@ class PurchaseReward extends StatelessWidget {
         reward: reward,
         availablePoints: availablePoints,
       ),
-      child: BlocBuilder<PurchaseRewardCubit, PurchaseRewardState>(
+      child: BlocConsumer<PurchaseRewardCubit, PurchaseRewardState>(
+        listener: (context, state) {
+          if (state.status == PurchaseRewardStatus.success) {
+            Navigator.pop(context, true);
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<PurchaseRewardCubit>();
           return Dialog(
@@ -32,7 +37,8 @@ class PurchaseReward extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(
-                height: 360,
+                height:
+                    state.status == PurchaseRewardStatus.failure ? 380 : 360,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -161,12 +167,11 @@ class PurchaseReward extends StatelessWidget {
                           text: 'Confirm Purchase',
                           onPressed: () async {
                             await cubit.addPurchasedReward();
-                            if (context.mounted) {
-                              Navigator.pop(context, true);
-                            }
                           },
                         ),
                       ),
+                      if (state.status == PurchaseRewardStatus.failure)
+                        MPRFailureText(text: 'Failed to purchase reward'),
                     ],
                   ),
                 ),

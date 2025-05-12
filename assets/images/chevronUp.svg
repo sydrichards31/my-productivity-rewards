@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Chevron-Up</title>
+    <defs>
+        <filter color-interpolation-filters="auto" id="filter-1">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 0 0.000000 0 0 0 1.000000 0"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Chevron-Up" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g filter="url(#filter-1)" id="Icon">
+            <g transform="translate(2.989592, 5.818019)">
+                <path d="M10.5459415,-2.53553391 L10.8994949,-2.18198052 C11.2900192,-1.79145622 11.2900192,-1.15829124 10.8994949,-0.767766953 L5.94974747,4.18198052 L10.8994949,9.13172798 C11.2900192,9.52225228 11.2900192,10.1554173 10.8994949,10.5459415 L10.5459415,10.8994949 C10.1554173,11.2900192 9.52225228,11.2900192 9.13172798,10.8994949 L3.12132034,4.8890873 C2.73079605,4.498563 2.73079605,3.86539803 3.12132034,3.47487373 L9.13172798,-2.53553391 C9.52225228,-2.9260582 10.1554173,-2.9260582 10.5459415,-2.53553391 Z" id="up-Icon" fill="#627181" transform="translate(7.010408, 4.181981) rotate(90.000000) translate(-7.010408, -4.181981) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

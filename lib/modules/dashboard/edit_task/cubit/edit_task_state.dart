@@ -24,6 +24,9 @@ class EditTaskState {
   }
 
   bool get updateEnabled => description.isNotEmpty && points.isNotEmpty;
+  bool get failureStatus =>
+      status == EditTaskStatus.deleteTaskFailure ||
+      status == EditTaskStatus.updateTaskFailure;
 
   List<Object> get props => [
         status,
@@ -36,8 +39,10 @@ enum EditTaskStatus {
   initial,
   descriptionChanged,
   pointsChanged,
-  addingTask,
-  taskDeleted,
-  success,
-  failure,
+  updatingTask,
+  updateTaskSuccess,
+  updateTaskFailure,
+  deletingTask,
+  deleteTaskSuccess,
+  deleteTaskFailure,
 }

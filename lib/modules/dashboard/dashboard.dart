@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
-import 'package:my_productive_rewards/models/task.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/dashboard/add_completed_task/add_completed_task.dart';
 import 'package:my_productive_rewards/modules/dashboard/add_new_task/add_new_task.dart';
 import 'package:my_productive_rewards/modules/dashboard/cubit/dashboard_cubit.dart';
@@ -132,51 +132,7 @@ class _Points extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ColoredBox(
-          color: ColorPalette.green.shade100,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
-                  bottom: 8.0,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Text(
-                        points,
-                        style: MPRTextStyles.extraLargeSemiBold.copyWith(
-                          fontSize: 65,
-                          height: 1,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child:
-                              Text('TOTAL', style: MPRTextStyles.regularBold),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 1.0),
-                          child:
-                              Text('POINTS', style: MPRTextStyles.regularBold),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              MPRDivider(),
-            ],
-          ),
-        ),
+        MPRPointsHeader(points: points, topText: 'TOTAL', bottomText: 'POINTS'),
         if (int.tryParse(goalPoints) != null) ...[
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12),

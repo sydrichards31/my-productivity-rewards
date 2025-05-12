@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_productive_rewards/models/task.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
 
 part 'edit_task_state.dart';
@@ -42,8 +42,9 @@ class EditTaskCubit extends Cubit<EditTaskState> {
     );
   }
 
-  Future<bool> updateTask(int id) async {
+  Future<void> updateTask(int id) async {
     try {
+      emit(state.copyWith(status: EditTaskStatus.updatingTask));
       await _databaseService.updateTask(
         Task(
           description: descriptionTextController.text,
@@ -51,19 +52,19 @@ class EditTaskCubit extends Cubit<EditTaskState> {
           taskId: id,
         ),
       );
-      return true;
+      emit(state.copyWith(status: EditTaskStatus.updateTaskSuccess));
     } catch (_) {
-      emit(state.copyWith(status: EditTaskStatus.failure));
-      return false;
+      emit(state.copyWith(status: EditTaskStatus.updateTaskFailure));
     }
   }
 
   Future<void> deleteTask(int id) async {
     try {
+      emit(state.copyWith(status: EditTaskStatus.deletingTask));
       await _databaseService.deleteTask(id);
-      emit(state.copyWith(status: EditTaskStatus.taskDeleted));
+      emit(state.copyWith(status: EditTaskStatus.deleteTaskSuccess));
     } catch (_) {
-      emit(state.copyWith(status: EditTaskStatus.failure));
+      emit(state.copyWith(status: EditTaskStatus.deleteTaskFailure));
     }
   }
 

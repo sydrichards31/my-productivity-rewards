@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:my_productive_rewards/components/components.dart';
-import 'package:my_productive_rewards/models/purchased_reward.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/rewards/add_new_reward/add_new_reward.dart';
 import 'package:my_productive_rewards/modules/rewards/cubit/my_rewards_cubit.dart';
 import 'package:my_productive_rewards/modules/rewards/edit_reward/edit_reward.dart';
@@ -42,8 +42,10 @@ class Rewards extends StatelessWidget {
             bodyWidget = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _Points(
+                MPRPointsHeader(
                   points: state.points,
+                  topText: 'POINTS',
+                  bottomText: 'AVAILABLE',
                 ),
                 MPRTabBar(
                   tabs: RewardsFilterTab.values
@@ -98,59 +100,6 @@ class Rewards extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class _Points extends StatelessWidget {
-  final String points;
-  const _Points({required this.points});
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: ColorPalette.green.shade100,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 8.0,
-              bottom: 8.0,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: Text(
-                    points,
-                    style: MPRTextStyles.extraLargeSemiBold.copyWith(
-                      fontSize: 65,
-                      height: 1,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Text('POINTS', style: MPRTextStyles.regularBold),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 1.0),
-                      child:
-                          Text('AVAILABLE', style: MPRTextStyles.regularBold),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          MPRDivider(),
-        ],
       ),
     );
   }

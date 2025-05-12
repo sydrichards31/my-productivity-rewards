@@ -21,12 +21,12 @@ class AddCompletedTask extends StatelessWidget {
         description: description,
         points: points,
       ),
-      child: BlocBuilder<AddCompletedTaskCubit, AddCompletedTaskState>(
-        // listener: (context, state) {
-        //   if (state.status == AddCompletedTaskStatus.success) {
-        //     Navigator.pop(context, true);
-        //   }
-        // },
+      child: BlocConsumer<AddCompletedTaskCubit, AddCompletedTaskState>(
+        listener: (context, state) {
+          if (state.status == AddCompletedTaskStatus.success) {
+            Navigator.pop(context, true);
+          }
+        },
         builder: (context, state) {
           final cubit = context.read<AddCompletedTaskCubit>();
           return Dialog(
@@ -35,7 +35,8 @@ class AddCompletedTask extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(
-                height: 285,
+                height:
+                    state.status == AddCompletedTaskStatus.failure ? 310 : 285,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -100,12 +101,11 @@ class AddCompletedTask extends StatelessWidget {
                           text: 'Save and Close',
                           onPressed: () async {
                             await cubit.addCompletedTask();
-                            if (context.mounted) {
-                              Navigator.pop(context, true);
-                            }
                           },
                         ),
                       ),
+                      if (state.status == AddCompletedTaskStatus.failure)
+                        MPRFailureText(text: 'Failed to add completed task'),
                     ],
                   ),
                 ),

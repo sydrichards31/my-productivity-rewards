@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:my_productive_rewards/models/task.dart';
+import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
 
 part 'add_new_task_state.dart';
@@ -39,18 +39,18 @@ class AddNewTaskCubit extends Cubit<AddNewTaskState> {
     );
   }
 
-  Future<bool> addTask() async {
+  Future<void> addTask() async {
     try {
+      emit(state.copyWith(status: AddNewTaskStatus.addingTask));
       await _databaseService.addTask(
         Task(
           description: descriptionTextController.text,
           points: int.parse(pointsTextController.text),
         ),
       );
-      return true;
+      emit(state.copyWith(status: AddNewTaskStatus.success));
     } catch (_) {
       emit(state.copyWith(status: AddNewTaskStatus.failure));
-      return false;
     }
   }
 
