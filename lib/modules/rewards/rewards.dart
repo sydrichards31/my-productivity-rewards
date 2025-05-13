@@ -89,9 +89,11 @@ class Rewards extends StatelessWidget {
               backgroundColor: ColorPalette.green,
               child: const Icon(Icons.add),
               onPressed: () async {
-                final result = await showDialog<bool?>(
-                  context: context,
-                  builder: (context) => AddNewReward(),
+                final result = await Navigator.push<bool?>(
+                  context,
+                  MPRRoute(
+                    widget: const AddNewReward(),
+                  ),
                 );
                 if (context.mounted && result != null && result) {
                   await context.read<MyRewardsCubit>().initializeMyRewards();

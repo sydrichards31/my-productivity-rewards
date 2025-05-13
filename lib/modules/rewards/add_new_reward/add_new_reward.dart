@@ -21,9 +21,10 @@ class AddNewReward extends StatelessWidget {
         },
         builder: (context, state) {
           final cubit = context.read<AddNewRewardCubit>();
-          return Dialog(
-            insetPadding: const EdgeInsets.all(30),
-            child: GestureDetector(
+          return Scaffold(
+            appBar: MPRAppBar(title: 'New Reward'),
+            backgroundColor: Colors.white,
+            body: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(

@@ -59,9 +59,9 @@ class Tabs extends StatelessWidget {
                         currentIndex: selectedTabIndex,
                         onTap: (index) async =>
                             tabsCubit.selectTab(state.tabs[index]),
-                        selectedItemColor: Colors.black,
+                        selectedItemColor: ColorPalette.platinum.shade500,
                         selectedLabelStyle: MPRTextStyles.regularSemiBold,
-                        unselectedItemColor: ColorPalette.platinum.shade500,
+                        unselectedItemColor: Colors.black,
                         unselectedLabelStyle: MPRTextStyles.regular,
                       )
                     : null,
@@ -107,17 +107,12 @@ BottomNavigationBarItem _buildBottomNavigationBarItem({
   required ColorPalette colorPalette,
 }) {
   return BottomNavigationBarItem(
-    icon: SvgAdapter.asset(
-      icon,
-      width: 25,
-      height: 25,
-      color: ColorPalette.platinum.shade500,
-    ),
+    icon: SvgAdapter.asset(icon, width: 25, height: 25, color: Colors.black),
     activeIcon: SvgAdapter.asset(
       icon,
       width: 25,
       height: 25,
-      color: Colors.black,
+      color: ColorPalette.platinum.shade500,
     ),
     label: label,
   );

@@ -25,7 +25,7 @@ class TaskLog extends StatelessWidget {
           } else if (state.tasks.isEmpty) {
             bodyWidget = Center(
               child: Text(
-                'No rewards saved',
+                'No tasks recorded',
                 style: MPRTextStyles.large,
               ),
             );

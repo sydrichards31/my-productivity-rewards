@@ -9,6 +9,7 @@ export 'mpr_failure_text.dart';
 export 'mpr_loader.dart';
 export 'mpr_navigation_scaffold.dart';
 export 'mpr_points_header.dart';
+export 'mpr_route.dart';
 export 'mpr_single_line_item.dart';
 export 'mpr_snackbar.dart';
 export 'mpr_tab_bar.dart';
