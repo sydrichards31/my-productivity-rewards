@@ -14,8 +14,8 @@ class Tabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<BottomTabBarItem> bottomTabBarItems = _buildBottomTabs(context);
-    final Map<BottomTabType, Widget> tabsWidgets = {
+    List<BottomTabBarItem> bottomTabBarItems = _buildBottomTabs(context);
+    Map<BottomTabType, Widget> tabsWidgets = {
       for (final item in bottomTabBarItems)
         item.tabType: const SizedBox.shrink(),
     };
@@ -23,7 +23,16 @@ class Tabs extends StatelessWidget {
       create: (_) => BottomTabsCubit(
         tabs: bottomTabBarItems.map((e) => e.tabType).toList(),
       ),
-      child: BlocBuilder<BottomTabsCubit, BottomTabsState>(
+      child: BlocConsumer<BottomTabsCubit, BottomTabsState>(
+        listener: (context, state) {
+          if (state is ResetAllTabsSuccess) {
+            bottomTabBarItems = _buildBottomTabs(context);
+            tabsWidgets = {
+              for (final item in bottomTabBarItems)
+                item.tabType: const SizedBox.shrink(),
+            };
+          }
+        },
         buildWhen: (previous, current) => current is ResetAllTabsSuccess,
         builder: (context, state) {
           return BlocBuilder<BottomTabsCubit, BottomTabsState>(

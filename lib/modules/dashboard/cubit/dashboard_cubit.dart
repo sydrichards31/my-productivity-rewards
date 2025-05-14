@@ -24,6 +24,7 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   Future<void> initializeDashboard() async {
     try {
+      emit(state.copyWith(status: DashboardStatus.loading));
       final tasks = await _databaseService.getTasks();
       final points = await _persistentStorageService
           .getString(PersistentStorageService.pointsKey, defaultValue: '0');

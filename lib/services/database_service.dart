@@ -20,7 +20,7 @@ class DatabaseService {
           'CREATE TABLE TaskLog (id INTEGER PRIMARY KEY, task TEXT, points INTEGER, date TEXT)',
         );
         await db.execute(
-          'CREATE TABLE Rewards (id INTEGER PRIMARY KEY, description TEXT, value INTEGER, link TEXT)',
+          'CREATE TABLE Rewards (id INTEGER PRIMARY KEY, description TEXT, value INTEGER, link TEXT, isGoal INTEGER)',
         );
       },
     );

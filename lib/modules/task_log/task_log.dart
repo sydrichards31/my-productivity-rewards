@@ -110,7 +110,7 @@ class _Header extends StatelessWidget {
                   width: 148,
                   height: 42,
                   child: MPRDropdown(
-                    value: 'Sort By:   ${state.filterBy}',
+                    value: state.filterBy,
                     values: sortByValues,
                     onValueChanged: (filter) => cubit.filterByChanged(filter),
                   ),

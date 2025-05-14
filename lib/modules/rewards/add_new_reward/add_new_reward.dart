@@ -21,124 +21,121 @@ class AddNewReward extends StatelessWidget {
         },
         builder: (context, state) {
           final cubit = context.read<AddNewRewardCubit>();
-          return Scaffold(
-            appBar: MPRAppBar(title: 'New Reward'),
-            backgroundColor: Colors.white,
-            body: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: SizedBox(
-                height: state.status == AddNewRewardStatus.failure ? 420 : 400,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    top: 20,
-                    bottom: 14,
-                    left: 20,
-                    right: 20,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Add Reward',
-                        style: MPRTextStyles.largeSemiBold,
-                      ),
-                      const SizedBox(
-                        height: 6,
-                      ),
-                      const Text(
-                        'Enter the description of the reward you would like to add along with its point value.',
-                        style: MPRTextStyles.regular,
-                      ),
-                      const SizedBox(
-                        height: 22,
-                      ),
-                      SizedBox(
-                        height: 42,
-                        child: MPRTextField.filledSmall(
-                          label: 'Description',
-                          controller: cubit.descriptionTextController,
-                          autoCorrect: false,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 8,
-                          ),
-                          onChanged: (value) => cubit.descriptionChanged(value),
+          return GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Scaffold(
+              appBar: MPRAppBar(title: 'New Reward'),
+              backgroundColor: Colors.white,
+              body: Padding(
+                padding: const EdgeInsets.only(
+                  top: 20,
+                  bottom: 14,
+                  left: 20,
+                  right: 20,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Add Reward',
+                      style: MPRTextStyles.largeSemiBold,
+                    ),
+                    const SizedBox(
+                      height: 6,
+                    ),
+                    const Text(
+                      'Enter the description of the reward you would like to add along with its point value.',
+                      style: MPRTextStyles.regular,
+                    ),
+                    const SizedBox(
+                      height: 22,
+                    ),
+                    SizedBox(
+                      height: 42,
+                      child: MPRTextField.filledSmall(
+                        label: 'Description',
+                        controller: cubit.descriptionTextController,
+                        autoCorrect: false,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 8,
                         ),
+                        onChanged: (value) => cubit.descriptionChanged(value),
                       ),
-                      const SizedBox(
-                        height: 22,
-                      ),
-                      SizedBox(
-                        height: 42,
-                        child: MPRTextField.filledSmall(
-                          label: 'Value',
-                          controller: cubit.valueTextController,
-                          keyboardType: TextInputType.number,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 8,
-                          ),
-                          onChanged: (value) => cubit.valueChanged(value),
+                    ),
+                    const SizedBox(
+                      height: 22,
+                    ),
+                    SizedBox(
+                      height: 42,
+                      child: MPRTextField.filledSmall(
+                        label: 'Value',
+                        controller: cubit.valueTextController,
+                        keyboardType: TextInputType.number,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 8,
                         ),
+                        onChanged: (value) => cubit.valueChanged(value),
                       ),
-                      const SizedBox(
-                        height: 22,
-                      ),
-                      SizedBox(
-                        height: 42,
-                        child: MPRTextField.filledSmall(
-                          label: 'Image Link',
-                          autoCorrect: false,
-                          controller: cubit.linkTextController,
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 2,
-                            horizontal: 8,
-                          ),
-                          onChanged: (value) => cubit.linkChanged(value),
+                    ),
+                    const SizedBox(
+                      height: 22,
+                    ),
+                    SizedBox(
+                      height: 42,
+                      child: MPRTextField.filledSmall(
+                        label: 'Image Link',
+                        autoCorrect: false,
+                        controller: cubit.linkTextController,
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 8,
                         ),
+                        onChanged: (value) => cubit.linkChanged(value),
                       ),
-                      const SizedBox(height: 8),
-                      MPRCheckboxLine(
-                        value: state.isGoal == 1,
-                        text: 'Current goal',
-                        onChanged: (isGoal) => cubit.setIsGoal(isGoal),
-                        infoIcon: Padding(
-                          padding: const EdgeInsets.only(left: 3.0),
-                          child: SizedBox(
-                            height: 18,
-                            width: 18,
-                            child: IconButton(
-                              onPressed: () {
-                                _showCurrentGoalInfo(context);
-                              },
-                              visualDensity: VisualDensity.compact,
-                              padding: EdgeInsets.zero,
-                              icon: Icon(
-                                Icons.info,
-                                color: ColorPalette.gunmetal.shade300,
-                                size: 18,
-                              ),
+                    ),
+                    const SizedBox(height: 8),
+                    MPRCheckboxLine(
+                      value: state.isGoal == 1,
+                      text: 'Current goal',
+                      onChanged: (isGoal) => cubit.setIsGoal(isGoal),
+                      infoIcon: Padding(
+                        padding: const EdgeInsets.only(left: 3.0),
+                        child: SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: IconButton(
+                            onPressed: () {
+                              _showCurrentGoalInfo(context);
+                            },
+                            visualDensity: VisualDensity.compact,
+                            padding: EdgeInsets.zero,
+                            icon: Icon(
+                              Icons.info,
+                              color: ColorPalette.gunmetal.shade300,
+                              size: 18,
                             ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 12.0),
-                        child: MPRButton.primary(
-                          height: 40,
-                          text: 'Save and Close',
-                          onPressed: state.addEnabled
-                              ? () async {
-                                  await cubit.addReward();
-                                }
-                              : null,
-                        ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: MPRButton.primary(
+                        height: 40,
+                        text: 'Save and Close',
+                        onPressed: state.addEnabled
+                            ? () async {
+                                await cubit.addReward();
+                              }
+                            : null,
                       ),
-                      if (state.status == AddNewRewardStatus.failure)
-                        MPRFailureText(text: 'Failed to add reward'),
-                    ],
-                  ),
+                    ),
+                    if (state.status == AddNewRewardStatus.failure)
+                      MPRFailureText(text: 'Failed to add reward'),
+                  ],
                 ),
               ),
             ),

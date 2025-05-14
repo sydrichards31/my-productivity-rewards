@@ -15,7 +15,7 @@ class TaskLogCubit extends Cubit<TaskLogState> {
           TaskLogState(
             status: TaskLogStatus.loading,
             tasks: [],
-            filterBy: 'Date',
+            filterBy: 'Sort By:   Date',
             sortDirection: SortDirection.desc,
           ),
         );
@@ -26,7 +26,7 @@ class TaskLogCubit extends Cubit<TaskLogState> {
       if (tasks == null) {
         emit(state.copyWith(status: TaskLogStatus.failure));
       } else {
-        if (state.filterBy == 'A to Z') {
+        if (state.filterBy == 'Sort By:   A to Z') {
           if (state.sortDirection == SortDirection.desc) {
             tasks.sort((a, b) => a.description.compareTo(b.description));
           } else {
@@ -52,7 +52,7 @@ class TaskLogCubit extends Cubit<TaskLogState> {
 
   void filterByChanged(String? filter) {
     final List<CompletedTask> sortedTasks = List.from(state.tasks);
-    if (state.filterBy == 'Date') {
+    if (state.filterBy == 'Sort By:   Date') {
       if (state.sortDirection == SortDirection.desc) {
         sortedTasks.sort((a, b) => a.description.compareTo(b.description));
       } else {
@@ -80,7 +80,7 @@ class TaskLogCubit extends Cubit<TaskLogState> {
 
   void sortDirectionChanged() {
     final List<CompletedTask> sortedTasks = List.from(state.tasks);
-    if (state.filterBy == 'A to Z') {
+    if (state.filterBy == 'Sort By:   A to Z') {
       if (state.sortDirection == SortDirection.asc) {
         sortedTasks.sort((a, b) => a.description.compareTo(b.description));
       } else {
