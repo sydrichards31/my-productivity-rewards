@@ -17,25 +17,8 @@ class SettingsCubit extends Cubit<SettingsState> {
       : super(
           SettingsState(
             status: SettingsStatus.initial,
-            goalPoints: '',
           ),
         );
-
-  Future<void> initializeSettings() async {
-    try {
-      final goalPoints = await _persistentStorageService
-          .getString(PersistentStorageService.goalPointsKey);
-      goalPointsTextController.text = goalPoints;
-      emit(
-        state.copyWith(
-          status: SettingsStatus.loaded,
-          goalPoints: goalPoints,
-        ),
-      );
-    } catch (_) {
-      emit(state.copyWith(status: SettingsStatus.failure));
-    }
-  }
 
   Future<void> clearTasks() async {
     await _databaseService.deleteAllTasks();
@@ -53,16 +36,36 @@ class SettingsCubit extends Cubit<SettingsState> {
   }
 
   Future<void> clearPurchasedRewards() async {
+    await _databaseService.deleteAllPurchasedRewards();
+    emit(state.copyWith(status: SettingsStatus.purchasedRewardsCleared));
+  }
+
+  Future<void> clearPoints() async {
+    await _persistentStorageService.setString(
+      PersistentStorageService.goalPointsKey,
+      '',
+    );
+    await _persistentStorageService.setString(
+      PersistentStorageService.pointsKey,
+      '0',
+    );
+    emit(state.copyWith(status: SettingsStatus.pointsCleared));
+  }
+
+  Future<void> clearAllData() async {
     await _databaseService.deleteAllTasks();
     await _databaseService.deleteAllCompletedTasks();
     await _databaseService.deleteAllRewards();
     await _databaseService.deleteAllPurchasedRewards();
+    await _persistentStorageService.setString(
+      PersistentStorageService.goalPointsKey,
+      '',
+    );
+    await _persistentStorageService.setString(
+      PersistentStorageService.pointsKey,
+      '0',
+    );
     emit(state.copyWith(status: SettingsStatus.allDataCleared));
-  }
-
-  Future<void> clearAllData() async {
-    await _databaseService.deleteAllPurchasedRewards();
-    emit(state.copyWith(status: SettingsStatus.purchasedRewardsCleared));
   }
 
   @override

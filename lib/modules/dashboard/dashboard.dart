@@ -7,6 +7,7 @@ import 'package:my_productive_rewards/modules/dashboard/add_new_task/add_new_tas
 import 'package:my_productive_rewards/modules/dashboard/cubit/dashboard_cubit.dart';
 import 'package:my_productive_rewards/modules/dashboard/edit_task/edit_task.dart';
 import 'package:my_productive_rewards/modules/settings/settings.dart';
+import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 
 class Dashboard extends StatelessWidget {
@@ -16,7 +17,18 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<DashboardCubit>(
       create: (_) => DashboardCubit()..initializeDashboard(),
-      child: BlocBuilder<DashboardCubit, DashboardState>(
+      child: BlocConsumer<DashboardCubit, DashboardState>(
+        listener: (context, state) {
+          if (state.status == DashboardStatus.completedTaskAdded) {
+            context.read<BottomTabsCubit>().resetAllTabs();
+            MPRSnackBar(
+              text: 'Completed task saved',
+              actionLabel: 'Close',
+              actionOnPressed: () =>
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+            ).show(context);
+          }
+        },
         builder: (context, state) {
           Widget bodyWidget = const SizedBox.shrink();
           if (state.status == DashboardStatus.loading) {
@@ -57,16 +69,6 @@ class Dashboard extends StatelessWidget {
             appBar: MPRAppBar(
               title: 'Dashboard',
               trailingActions: [
-                SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: IconButton(
-                    visualDensity: VisualDensity.compact,
-                    onPressed: () =>
-                        context.read<DashboardCubit>().initializeDashboard(),
-                    icon: Icon(Icons.refresh),
-                  ),
-                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     left: 8,
@@ -80,7 +82,9 @@ class Dashboard extends StatelessWidget {
                       onPressed: () => Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => Settings(),
+                          builder: (_) => Settings(
+                            tabsCubit: context.read<BottomTabsCubit>(),
+                          ),
                         ),
                       ).then((_) {
                         if (context.mounted) {
@@ -251,21 +255,6 @@ class _MyTasks extends StatelessWidget {
                               context
                                   .read<DashboardCubit>()
                                   .completedTaskAdded(result);
-                              // context.read<BottomTabsCubit>().resetAllTabs();
-                              // if (context.mounted) {
-                              //   await context
-                              //       .read<DashboardCubit>()
-                              //       .initializeDashboard();
-                              // }
-                              // if (context.mounted) {
-                              //   MPRSnackBar(
-                              //     text: 'Completed task saved',
-                              //     actionLabel: 'Close',
-                              //     actionOnPressed: () =>
-                              //         ScaffoldMessenger.of(context)
-                              //             .hideCurrentSnackBar(),
-                              //   ).show(context);
-                              // }
                             }
                           },
                           icon: Icon(

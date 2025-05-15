@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
 import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/modules/settings/settings.dart';
+import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
 import 'package:my_productive_rewards/modules/task_log/cubit/task_log_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 
@@ -46,7 +47,8 @@ class TaskLog extends StatelessWidget {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => Settings(),
+                      builder: (_) =>
+                          Settings(tabsCubit: context.read<BottomTabsCubit>()),
                     ),
                   ),
                   icon: Icon(Icons.settings),

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:my_productive_rewards/models/models.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
+import 'package:my_productive_rewards/utils/utils.dart';
 
 part 'task_log_state.dart';
 
@@ -35,11 +36,13 @@ class TaskLogCubit extends Cubit<TaskLogState> {
         } else {
           if (state.sortDirection == SortDirection.desc) {
             tasks.sort(
-              (a, b) => _getDateTime(b.date).compareTo(_getDateTime(a.date)),
+              (a, b) => b.date.dateFromFormattedDateString
+                  .compareTo(a.date.dateFromFormattedDateString),
             );
           } else {
             tasks.sort(
-              (a, b) => _getDateTime(a.date).compareTo(_getDateTime(b.date)),
+              (a, b) => a.date.dateFromFormattedDateString
+                  .compareTo(b.date.dateFromFormattedDateString),
             );
           }
         }
@@ -61,11 +64,13 @@ class TaskLogCubit extends Cubit<TaskLogState> {
     } else {
       if (state.sortDirection == SortDirection.desc) {
         sortedTasks.sort(
-          (a, b) => _getDateTime(b.date).compareTo(_getDateTime(a.date)),
+          (a, b) => b.date.dateFromFormattedDateString
+              .compareTo(a.date.dateFromFormattedDateString),
         );
       } else {
         sortedTasks.sort(
-          (a, b) => _getDateTime(a.date).compareTo(_getDateTime(b.date)),
+          (a, b) => a.date.dateFromFormattedDateString
+              .compareTo(b.date.dateFromFormattedDateString),
         );
       }
     }
@@ -89,11 +94,13 @@ class TaskLogCubit extends Cubit<TaskLogState> {
     } else {
       if (state.sortDirection == SortDirection.asc) {
         sortedTasks.sort(
-          (a, b) => _getDateTime(b.date).compareTo(_getDateTime(a.date)),
+          (a, b) => b.date.dateFromFormattedDateString
+              .compareTo(a.date.dateFromFormattedDateString),
         );
       } else {
         sortedTasks.sort(
-          (a, b) => _getDateTime(a.date).compareTo(_getDateTime(b.date)),
+          (a, b) => a.date.dateFromFormattedDateString
+              .compareTo(b.date.dateFromFormattedDateString),
         );
       }
     }
@@ -106,44 +113,5 @@ class TaskLogCubit extends Cubit<TaskLogState> {
         tasks: sortedTasks,
       ),
     );
-  }
-
-  DateTime _getDateTime(String date) {
-    final split = date.split(' ');
-    final month = split[1];
-    final day = int.parse(split[2].substring(0, split[2].indexOf(',')));
-    final year = int.parse(split[3]);
-    return DateTime(year, _getMonth(month), day);
-  }
-
-  int _getMonth(String month) {
-    switch (month) {
-      case 'January':
-        return 1;
-      case 'February':
-        return 2;
-      case 'March':
-        return 3;
-      case 'April':
-        return 4;
-      case 'May':
-        return 5;
-      case 'June':
-        return 6;
-      case 'July':
-        return 7;
-      case 'August':
-        return 8;
-      case 'September':
-        return 9;
-      case 'October':
-        return 10;
-      case 'November':
-        return 11;
-      case 'December':
-        return 12;
-      default:
-        return -1;
-    }
   }
 }

@@ -48,4 +48,5 @@ enum MyRewardsStatus {
   rewardDeleted,
   editingReward,
   failure,
+  rewardPurchased,
 }

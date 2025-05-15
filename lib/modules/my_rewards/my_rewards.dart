@@ -4,12 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:my_productive_rewards/components/components.dart';
 import 'package:my_productive_rewards/models/models.dart';
-import 'package:my_productive_rewards/modules/rewards/add_new_reward/add_new_reward.dart';
-import 'package:my_productive_rewards/modules/rewards/cubit/my_rewards_cubit.dart';
-import 'package:my_productive_rewards/modules/rewards/edit_reward/edit_reward.dart';
-import 'package:my_productive_rewards/modules/rewards/purchase_reward/purchase_reward.dart';
-import 'package:my_productive_rewards/modules/rewards/rewards_filter_tab.dart';
+import 'package:my_productive_rewards/modules/my_rewards/add_new_reward/add_new_reward.dart';
+import 'package:my_productive_rewards/modules/my_rewards/cubit/my_rewards_cubit.dart';
+import 'package:my_productive_rewards/modules/my_rewards/edit_reward/edit_reward.dart';
+import 'package:my_productive_rewards/modules/my_rewards/purchase_reward/purchase_reward.dart';
+import 'package:my_productive_rewards/modules/my_rewards/rewards_filter_tab.dart';
 import 'package:my_productive_rewards/modules/settings/settings.dart';
+import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 import 'package:my_productive_rewards/utils/utils.dart';
 
@@ -20,7 +21,18 @@ class Rewards extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<MyRewardsCubit>(
       create: (_) => MyRewardsCubit()..initializeMyRewards(),
-      child: BlocBuilder<MyRewardsCubit, MyRewardsState>(
+      child: BlocConsumer<MyRewardsCubit, MyRewardsState>(
+        listener: (context, state) {
+          if (state.status == MyRewardsStatus.rewardPurchased) {
+            context.read<BottomTabsCubit>().resetAllTabs();
+            MPRSnackBar(
+              text: 'Reward purchased!',
+              actionLabel: 'Close',
+              actionOnPressed: () =>
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+            ).show(context);
+          }
+        },
         builder: (context, state) {
           Widget bodyWidget = const SizedBox.shrink();
           if (state.status == MyRewardsStatus.loading) {
@@ -29,16 +41,16 @@ class Rewards extends StatelessWidget {
             bodyWidget = Center(child: Text('Unable to load data'));
           } else if ((state.status == MyRewardsStatus.loaded ||
                   state.status == MyRewardsStatus.rewardsUpdated) &&
-              state.rewards.isEmpty) {
+              state.rewards.isEmpty &&
+              state.purchasedRewards.isEmpty) {
             bodyWidget = Center(
               child: Text(
                 'No rewards saved',
                 style: MPRTextStyles.large,
               ),
             );
-          } else if ((state.status != MyRewardsStatus.loading &&
-                  state.status != MyRewardsStatus.failure) &&
-              state.rewards.isNotNullOrEmpty) {
+          } else if (state.status != MyRewardsStatus.loading &&
+              state.status != MyRewardsStatus.failure) {
             bodyWidget = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,7 +69,17 @@ class Rewards extends StatelessWidget {
                       .selectTab(RewardsFilterTab.values[index]),
                 ),
                 if (state.selectedTab == RewardsFilterTab.rewards) ...[
-                  Expanded(child: _MyRewards(state: state)),
+                  if (state.rewards.isEmpty)
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'No rewards saved',
+                          style: MPRTextStyles.large,
+                        ),
+                      ),
+                    ),
+                  if (state.rewards.isNotEmpty)
+                    Expanded(child: _MyRewards(state: state)),
                 ],
                 if (state.selectedTab == RewardsFilterTab.purchased) ...[
                   Expanded(
@@ -75,7 +97,8 @@ class Rewards extends StatelessWidget {
                   onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => Settings(),
+                      builder: (_) =>
+                          Settings(tabsCubit: context.read<BottomTabsCubit>()),
                     ),
                   ),
                   icon: Icon(Icons.settings),
@@ -96,6 +119,7 @@ class Rewards extends StatelessWidget {
                   ),
                 );
                 if (context.mounted && result != null && result) {
+                  context.read<BottomTabsCubit>().resetAllTabs();
                   await context.read<MyRewardsCubit>().initializeMyRewards();
                 }
               },
@@ -269,28 +293,17 @@ class _MyRewards extends StatelessWidget {
                                   if (int.parse(state.points) < reward.value) {
                                     await _showNotEnoughPointsDialog(context);
                                   } else {
-                                    final result = await showDialog<bool?>(
+                                    final result = await showDialog<String?>(
                                       context: context,
                                       builder: (context) => PurchaseReward(
                                         reward: reward,
                                         availablePoints: state.points,
                                       ),
                                     );
-                                    if (context.mounted &&
-                                        result != null &&
-                                        result) {
+                                    if (context.mounted && result != null) {
                                       await context
                                           .read<MyRewardsCubit>()
-                                          .initializeMyRewards();
-                                      if (context.mounted) {
-                                        MPRSnackBar(
-                                          text: 'Reward purchased!',
-                                          actionLabel: 'Close',
-                                          actionOnPressed: () =>
-                                              ScaffoldMessenger.of(context)
-                                                  .hideCurrentSnackBar(),
-                                        ).show(context);
-                                      }
+                                          .rewardPurchased(result);
                                     }
                                   }
                                 },

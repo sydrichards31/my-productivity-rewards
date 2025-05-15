@@ -46,7 +46,7 @@ class PurchaseRewardCubit extends Cubit<PurchaseRewardState> {
     );
   }
 
-  Future<void> addPurchasedReward() async {
+  Future<void> confirmPurchase() async {
     try {
       final reward = PurchasedReward(
         description: _reward.description,
@@ -58,13 +58,24 @@ class PurchaseRewardCubit extends Cubit<PurchaseRewardState> {
       await _databaseService.deleteReward(_reward.rewardId!);
       final rewards = await _databaseService.getPurchasedRewards();
 
-      if (rewards.isNotNullOrEmpty && rewards!.contains(reward)) {
+      if (rewards.isNotNullOrEmpty && reward.isInList(rewards)) {
         final remainingPoints = int.parse(_availablePoints) - _reward.value;
         await _persistentStorageService.setString(
           PersistentStorageService.pointsKey,
           remainingPoints.toString(),
         );
-        emit(state.copyWith(status: PurchaseRewardStatus.success));
+        if (_reward.isGoal == 1) {
+          await _persistentStorageService.setString(
+            PersistentStorageService.goalPointsKey,
+            '',
+          );
+        }
+        emit(
+          state.copyWith(
+            status: PurchaseRewardStatus.success,
+            totalPoints: remainingPoints.toString(),
+          ),
+        );
       } else {
         emit(state.copyWith(status: PurchaseRewardStatus.failure));
       }

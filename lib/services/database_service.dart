@@ -1,4 +1,5 @@
 import 'package:my_productive_rewards/models/models.dart';
+import 'package:my_productive_rewards/utils/utils.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -21,6 +22,9 @@ class DatabaseService {
         );
         await db.execute(
           'CREATE TABLE Rewards (id INTEGER PRIMARY KEY, description TEXT, value INTEGER, link TEXT, isGoal INTEGER)',
+        );
+        await db.execute(
+          'CREATE TABLE PurchasedRewards (id INTEGER PRIMARY KEY, description TEXT, value INTEGER, link TEXT, date TEXT)',
         );
       },
     );
@@ -183,6 +187,10 @@ class DatabaseService {
           ),
         );
       }
+      results.sort(
+        (a, b) => b.date.dateFromFormattedDateString
+            .compareTo(a.date.dateFromFormattedDateString),
+      );
       return results;
     } catch (_) {
       return null;

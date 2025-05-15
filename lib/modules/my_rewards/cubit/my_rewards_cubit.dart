@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_productive_rewards/models/models.dart';
-import 'package:my_productive_rewards/modules/rewards/rewards_filter_tab.dart';
+import 'package:my_productive_rewards/modules/my_rewards/rewards_filter_tab.dart';
 import 'package:my_productive_rewards/services/database_service.dart';
 import 'package:my_productive_rewards/services/persistent_storage_service.dart';
 
@@ -94,6 +94,19 @@ class MyRewardsCubit extends Cubit<MyRewardsState> {
     emit(
       state.copyWith(
         selectedTab: tab,
+      ),
+    );
+  }
+
+  Future<void> rewardPurchased(String points) async {
+    final rewards = await _databaseService.getRewards();
+    final purchasedRewards = await _databaseService.getPurchasedRewards();
+    emit(
+      state.copyWith(
+        status: MyRewardsStatus.rewardPurchased,
+        points: points,
+        rewards: rewards,
+        purchasedRewards: purchasedRewards,
       ),
     );
   }

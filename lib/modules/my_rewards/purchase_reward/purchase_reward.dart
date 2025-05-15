@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
 import 'package:my_productive_rewards/models/models.dart';
-import 'package:my_productive_rewards/modules/rewards/purchase_reward/cubit/purchase_reward_cubit.dart';
+import 'package:my_productive_rewards/modules/my_rewards/purchase_reward/cubit/purchase_reward_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 import 'package:my_productive_rewards/utils/utils.dart';
 
@@ -26,7 +26,7 @@ class PurchaseReward extends StatelessWidget {
       child: BlocConsumer<PurchaseRewardCubit, PurchaseRewardState>(
         listener: (context, state) {
           if (state.status == PurchaseRewardStatus.success) {
-            Navigator.pop(context, true);
+            Navigator.pop(context, state.totalPoints);
           }
         },
         builder: (context, state) {
@@ -38,7 +38,7 @@ class PurchaseReward extends StatelessWidget {
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(
                 height:
-                    state.status == PurchaseRewardStatus.failure ? 380 : 360,
+                    state.status == PurchaseRewardStatus.failure ? 390 : 360,
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -166,7 +166,7 @@ class PurchaseReward extends StatelessWidget {
                           height: 40,
                           text: 'Confirm Purchase',
                           onPressed: () async {
-                            await cubit.addPurchasedReward();
+                            await cubit.confirmPurchase();
                           },
                         ),
                       ),

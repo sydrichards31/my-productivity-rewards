@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
 import 'package:my_productive_rewards/modules/settings/cubit/settings_cubit.dart';
+import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 
 class Settings extends StatelessWidget {
-  const Settings({super.key});
+  final BottomTabsCubit tabsCubit;
+  const Settings({super.key, required this.tabsCubit});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SettingsCubit>(
-      create: (_) => SettingsCubit()..initializeSettings(),
+      create: (_) => SettingsCubit(),
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           final cubit = context.read<SettingsCubit>();
@@ -38,6 +40,7 @@ class Settings extends StatelessWidget {
                         );
                         if (result && context.mounted) {
                           cubit.clearTasks();
+                          tabsCubit.resetAllTabs();
                         }
                       },
                       horizontalPadding: 16,
@@ -56,6 +59,7 @@ class Settings extends StatelessWidget {
                         );
                         if (result && context.mounted) {
                           cubit.clearTaskLog();
+                          tabsCubit.resetAllTabs();
                         }
                       },
                       horizontalPadding: 16,
@@ -74,6 +78,7 @@ class Settings extends StatelessWidget {
                         );
                         if (result && context.mounted) {
                           cubit.clearRewards();
+                          tabsCubit.resetAllTabs();
                         }
                       },
                       horizontalPadding: 16,
@@ -92,6 +97,26 @@ class Settings extends StatelessWidget {
                         );
                         if (result && context.mounted) {
                           cubit.clearPurchasedRewards();
+                          tabsCubit.resetAllTabs();
+                        }
+                      },
+                      horizontalPadding: 16,
+                    ),
+                    MPRDivider(),
+                    MPRSingleLineItem(
+                      text: 'Clear Points',
+                      iconOnRight: false,
+                      textStyleOverride: MPRTextStyles.regularSemiBold
+                          .copyWith(color: Colors.red),
+                      onPressed: () async {
+                        final result = await _showClearConfirmationDialog(
+                          context,
+                          'clear all points',
+                          'Clear Points',
+                        );
+                        if (result && context.mounted) {
+                          cubit.clearPoints();
+                          tabsCubit.resetAllTabs();
                         }
                       },
                       horizontalPadding: 16,
@@ -110,6 +135,7 @@ class Settings extends StatelessWidget {
                         );
                         if (result && context.mounted) {
                           cubit.clearAllData();
+                          tabsCubit.resetAllTabs();
                         }
                       },
                       horizontalPadding: 16,

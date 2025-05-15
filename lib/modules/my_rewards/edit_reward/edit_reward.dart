@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_productive_rewards/components/components.dart';
 import 'package:my_productive_rewards/models/models.dart';
-import 'package:my_productive_rewards/modules/rewards/edit_reward/cubit/edit_reward_cubit.dart';
+import 'package:my_productive_rewards/modules/my_rewards/edit_reward/cubit/edit_reward_cubit.dart';
 import 'package:my_productive_rewards/services/navigation_service.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 

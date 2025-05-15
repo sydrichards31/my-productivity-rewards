@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/modules/dashboard/dashboard.dart';
-import 'package:my_productive_rewards/modules/rewards/rewards.dart';
+import 'package:my_productive_rewards/modules/my_rewards/my_rewards.dart';
 import 'package:my_productive_rewards/modules/tabs/bottom_tab_item.dart';
 import 'package:my_productive_rewards/modules/tabs/bottom_tab_type.dart';
 import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';

@@ -12,4 +12,18 @@ class PurchasedReward {
     this.link,
     required this.date,
   });
+
+  bool isInList(List<PurchasedReward>? rewards) {
+    if (rewards == null) return false;
+    bool contains = false;
+    for (final reward in rewards) {
+      if (reward.date == date &&
+          reward.description == description &&
+          reward.value == value &&
+          reward.link == link) {
+        contains = true;
+      }
+    }
+    return contains;
+  }
 }
