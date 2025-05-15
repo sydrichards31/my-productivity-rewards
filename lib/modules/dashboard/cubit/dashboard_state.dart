@@ -41,4 +41,5 @@ enum DashboardStatus {
   tasksUpdated,
   pointsUpdated,
   failure,
+  completedTaskAdded,
 }

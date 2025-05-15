@@ -25,7 +25,11 @@ class MyRewardsCubit extends Cubit<MyRewardsState> {
 
   Future<void> initializeMyRewards() async {
     try {
-      final rewards = await _databaseService.getRewards();
+      final List<Reward>? rewards = await _databaseService.getRewards();
+      if (rewards != null) {
+        rewards.sort((a, b) => b.isGoal.compareTo(a.isGoal));
+      }
+
       final purchasedRewards = await _databaseService.getPurchasedRewards();
       final points = await _persistentStorageService
           .getString(PersistentStorageService.pointsKey, defaultValue: '0');
@@ -47,6 +51,10 @@ class MyRewardsCubit extends Cubit<MyRewardsState> {
 
   Future<void> getRewards() async {
     final rewards = await _databaseService.getRewards();
+    if (rewards != null) {
+      rewards.sort((a, b) => b.isGoal.compareTo(a.isGoal));
+    }
+
     emit(
       state.copyWith(
         status: MyRewardsStatus.rewardsUpdated,
@@ -68,6 +76,10 @@ class MyRewardsCubit extends Cubit<MyRewardsState> {
     if (key != null) {
       await _databaseService.deleteReward(key);
       final rewards = await _databaseService.getRewards();
+      if (rewards != null) {
+        rewards.sort((a, b) => b.isGoal.compareTo(a.isGoal));
+      }
+
       emit(
         state.copyWith(
           status: MyRewardsStatus.rewardDeleted,

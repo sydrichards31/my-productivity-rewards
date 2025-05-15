@@ -7,9 +7,7 @@ import 'package:my_productive_rewards/modules/dashboard/add_new_task/add_new_tas
 import 'package:my_productive_rewards/modules/dashboard/cubit/dashboard_cubit.dart';
 import 'package:my_productive_rewards/modules/dashboard/edit_task/edit_task.dart';
 import 'package:my_productive_rewards/modules/settings/settings.dart';
-import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
-import 'package:my_productive_rewards/utils/utils.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -30,10 +28,7 @@ class Dashboard extends StatelessWidget {
                   state.status == DashboardStatus.pointsUpdated) &&
               state.tasks.isEmpty) {
             bodyWidget = Center(child: Text('No tasks saved'));
-          } else if ((state.status == DashboardStatus.loaded ||
-                  state.status == DashboardStatus.tasksUpdated ||
-                  state.status == DashboardStatus.pointsUpdated) &&
-              state.tasks.isNotNullOrEmpty) {
+          } else {
             bodyWidget = Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -245,27 +240,32 @@ class _MyTasks extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                           padding: EdgeInsets.zero,
                           onPressed: () async {
-                            final result = await showDialog<bool?>(
+                            final result = await showDialog<String?>(
                               context: context,
                               builder: (context) => AddCompletedTask(
                                 description: task.description,
                                 points: task.points,
                               ),
                             );
-                            if (context.mounted && result != null && result) {
-                              context.read<BottomTabsCubit>().resetAllTabs();
-                              if (context.mounted) {
-                                MPRSnackBar(
-                                  text: 'Completed task saved',
-                                  actionLabel: 'Close',
-                                  actionOnPressed: () =>
-                                      ScaffoldMessenger.of(context)
-                                          .hideCurrentSnackBar(),
-                                ).show(context);
-                                await context
-                                    .read<DashboardCubit>()
-                                    .initializeDashboard();
-                              }
+                            if (context.mounted && result != null) {
+                              context
+                                  .read<DashboardCubit>()
+                                  .completedTaskAdded(result);
+                              // context.read<BottomTabsCubit>().resetAllTabs();
+                              // if (context.mounted) {
+                              //   await context
+                              //       .read<DashboardCubit>()
+                              //       .initializeDashboard();
+                              // }
+                              // if (context.mounted) {
+                              //   MPRSnackBar(
+                              //     text: 'Completed task saved',
+                              //     actionLabel: 'Close',
+                              //     actionOnPressed: () =>
+                              //         ScaffoldMessenger.of(context)
+                              //             .hideCurrentSnackBar(),
+                              //   ).show(context);
+                              // }
                             }
                           },
                           icon: Icon(

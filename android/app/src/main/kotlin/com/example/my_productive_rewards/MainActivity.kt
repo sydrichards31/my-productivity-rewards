@@ -1,4 +1,4 @@
-package com.example.my_productive_rewards
+package com.srichards.my_productive_rewards
 
 import io.flutter.embedding.android.FlutterActivity
 

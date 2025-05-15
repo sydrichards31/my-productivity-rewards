@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_productive_rewards/components/components.dart';
 import 'package:my_productive_rewards/modules/dashboard/add_completed_task/cubit/add_completed_task_cubit.dart';
+import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 import 'package:my_productive_rewards/utils/utils.dart';
 
@@ -24,7 +25,14 @@ class AddCompletedTask extends StatelessWidget {
       child: BlocConsumer<AddCompletedTaskCubit, AddCompletedTaskState>(
         listener: (context, state) {
           if (state.status == AddCompletedTaskStatus.success) {
-            Navigator.pop(context, true);
+            Navigator.pop(context, state.totalPoints);
+            context.read<BottomTabsCubit>().resetAllTabs();
+            MPRSnackBar(
+              text: 'Completed task saved',
+              actionLabel: 'Close',
+              actionOnPressed: () =>
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+            ).show(context);
           }
         },
         builder: (context, state) {

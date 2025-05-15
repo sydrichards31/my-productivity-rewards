@@ -54,4 +54,13 @@ class DashboardCubit extends Cubit<DashboardState> {
         .getString(PersistentStorageService.pointsKey);
     emit(state.copyWith(status: DashboardStatus.pointsUpdated, points: points));
   }
+
+  void completedTaskAdded(String points) {
+    emit(
+      state.copyWith(
+        status: DashboardStatus.completedTaskAdded,
+        points: points,
+      ),
+    );
+  }
 }

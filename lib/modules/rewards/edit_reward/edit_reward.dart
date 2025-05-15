@@ -133,9 +133,6 @@ class EditReward extends StatelessWidget {
                                   reward.rewardId != null)
                               ? () async {
                                   await cubit.updateReward(reward.rewardId!);
-                                  if (context.mounted) {
-                                    Navigator.pop(context, true);
-                                  }
                                 }
                               : null,
                         ),

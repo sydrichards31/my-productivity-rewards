@@ -60,7 +60,12 @@ class AddCompletedTaskCubit extends Cubit<AddCompletedTaskState> {
         PersistentStorageService.pointsKey,
         newPoints.toString(),
       );
-      emit(state.copyWith(status: AddCompletedTaskStatus.success));
+      emit(
+        state.copyWith(
+          status: AddCompletedTaskStatus.success,
+          totalPoints: newPoints.toString(),
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(status: AddCompletedTaskStatus.failure));
     }
