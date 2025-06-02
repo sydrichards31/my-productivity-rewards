@@ -26,6 +26,12 @@ class DatabaseService {
         await db.execute(
           'CREATE TABLE PurchasedRewards (id INTEGER PRIMARY KEY, description TEXT, value INTEGER, link TEXT, date TEXT)',
         );
+
+        // Need to think about how to handle status of tasks. Maybe a list of booleans or add 0 / 1 to the end of each task string
+        // Also add a boolean for isCompleted or isFailed
+        // await db.execute(
+        //   'CREATE TABLE DailyChecklists (id INTEGER PRIMARY KEY, points INTEGER, date TEXT, tasks TEXT, isCompleted INTEGER, isFailed INTEGER)',
+        // );
       },
     );
   }
@@ -199,5 +205,14 @@ class DatabaseService {
 
   Future<void> deleteAllPurchasedRewards() async {
     await database.rawDelete('DELETE FROM PurchasedRewards');
+  }
+
+  // DAILY CHECKLIST //
+  Future<void> addDailyChecklist(PurchasedReward reward) async {
+    await database.transaction((txn) async {
+      await txn.rawInsert(
+        'INSERT INTO PurchasedRewards (description, value, link, date) VALUES("${reward.description}", "${reward.value}", "${reward.link}", "${reward.date}")',
+      );
+    });
   }
 }

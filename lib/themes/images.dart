@@ -12,4 +12,5 @@ class Images {
   String get goal => '${Images._path}goal.svg';
   String get chevronDown => '${Images._path}chevronDown.svg';
   String get chevronUp => '${Images._path}chevronUp.svg';
+  String get trash => '${Images._path}trash.svg';
 }

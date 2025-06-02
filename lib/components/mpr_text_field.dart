@@ -44,6 +44,7 @@ class MPRTextField extends StatefulWidget {
   final double? height;
   final bool sameFocusedFill;
   final double? cornerRadius;
+  final Color? borderColor;
 
   factory MPRTextField.filled({
     Key? key,
@@ -127,6 +128,8 @@ class MPRTextField extends StatefulWidget {
     bool whiteFill = false,
     bool expandSize = false,
     EdgeInsets? contentPadding,
+    Color? disabledFillColor,
+    Color? borderColor,
   }) =>
       MPRTextField._(
         key: key,
@@ -154,8 +157,9 @@ class MPRTextField extends StatefulWidget {
         scrollPadding: scrollPadding,
         whiteFill: whiteFill,
         expandSize: expandSize,
-        disabledFillColor: ColorPalette.platinum.shade600,
+        disabledFillColor: disabledFillColor,
         contentPadding: contentPadding,
+        borderColor: borderColor,
       );
 
   factory MPRTextField.information({
@@ -410,6 +414,7 @@ class MPRTextField extends StatefulWidget {
     this.height,
     this.sameFocusedFill = false,
     this.cornerRadius,
+    this.borderColor,
   });
 
   @override
@@ -557,13 +562,14 @@ class _MPRTextFieldState extends State<MPRTextField> {
                       ),
                     )
                   : InputBorder.none,
-          disabledBorder: widget.disabledFillColor != null
+          disabledBorder: (widget.disabledFillColor != null ||
+                  widget.borderColor != null)
               ? OutlineInputBorder(
                   borderRadius: BorderRadius.circular(widget.cornerRadius ?? 4),
                   borderSide: BorderSide(
                     color: widget.isError
                         ? ColorPalette.red
-                        : widget.disabledFillColor!,
+                        : widget.borderColor ?? widget.disabledFillColor!,
                   ),
                 )
               : InputBorder.none,
@@ -795,7 +801,7 @@ class _SuffixIcon extends StatelessWidget {
           },
           icon: ExcludeSemantics(
             child: SvgAdapter.asset(
-              appTheme.images.home,
+              appTheme.images.trash,
               color: color ?? ColorPalette.blue,
               width: 24.0,
               height: 24.0,

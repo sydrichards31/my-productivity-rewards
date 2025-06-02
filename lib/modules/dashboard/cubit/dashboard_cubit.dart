@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:my_productive_rewards/models/models.dart';
@@ -12,11 +13,13 @@ class DashboardCubit extends Cubit<DashboardState> {
   final PersistentStorageService _persistentStorageService =
       GetIt.I<PersistentStorageService>();
   final DatabaseService _databaseService = GetIt.I<DatabaseService>();
+  final TextEditingController searchBarTextField = TextEditingController();
   DashboardCubit()
       : super(
           DashboardState(
             status: DashboardStatus.loading,
             tasks: [],
+            filteredTasks: [],
             points: '',
             goalPoints: '',
           ),
@@ -35,6 +38,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         state.copyWith(
           status: DashboardStatus.loaded,
           tasks: tasks,
+          filteredTasks: tasks,
           points: points,
           goalPoints: goalPoints,
         ),
@@ -46,7 +50,21 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   Future<void> getTasks() async {
     final tasks = await _databaseService.getTasks();
-    emit(state.copyWith(status: DashboardStatus.tasksUpdated, tasks: tasks));
+    List<Task> filteredTasks = List.from(tasks);
+    filteredTasks = filteredTasks
+        .where(
+          (element) => element.description
+              .toLowerCase()
+              .contains(searchBarTextField.text.toLowerCase()),
+        )
+        .toList();
+    emit(
+      state.copyWith(
+        status: DashboardStatus.tasksUpdated,
+        tasks: tasks,
+        filteredTasks: filteredTasks,
+      ),
+    );
   }
 
   Future<void> getPoints() async {
@@ -60,6 +78,32 @@ class DashboardCubit extends Cubit<DashboardState> {
       state.copyWith(
         status: DashboardStatus.completedTaskAdded,
         points: points,
+      ),
+    );
+  }
+
+  void taskSearched() {
+    List<Task> filteredTasks = List.from(state.tasks);
+    filteredTasks = filteredTasks
+        .where(
+          (element) => element.description
+              .toLowerCase()
+              .contains(searchBarTextField.text.toLowerCase()),
+        )
+        .toList();
+    emit(
+      state.copyWith(
+        filteredTasks: filteredTasks,
+        status: DashboardStatus.searched,
+      ),
+    );
+  }
+
+  void searchCleared() {
+    emit(
+      state.copyWith(
+        filteredTasks: state.tasks,
+        status: DashboardStatus.searchCleared,
       ),
     );
   }

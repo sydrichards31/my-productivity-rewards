@@ -14,16 +14,20 @@ class AddCompletedTaskCubit extends Cubit<AddCompletedTaskState> {
   final DatabaseService _databaseService = GetIt.I<DatabaseService>();
   final PersistentStorageService _persistentStorageService =
       GetIt.I<PersistentStorageService>();
+  final descriptionTextController = TextEditingController();
+  final pointsTextController = TextEditingController();
   final dateTextController =
       TextEditingController(text: dateFormat.format(DateTime.now()));
 
-  late String _description;
-  late int _points;
-  AddCompletedTaskCubit({required String description, required int points})
+  late String? _description;
+  late int? _points;
+  AddCompletedTaskCubit({String? description, int? points})
       : super(
           AddCompletedTaskState(
             status: AddCompletedTaskStatus.initial,
             selectedDate: DateTime.now(),
+            description: '',
+            points: '',
           ),
         ) {
     _description = description;
@@ -42,20 +46,39 @@ class AddCompletedTaskCubit extends Cubit<AddCompletedTaskState> {
     );
   }
 
+  void descriptionChanged(String newDescription) {
+    emit(
+      state.copyWith(
+        description: newDescription,
+        status: AddCompletedTaskStatus.descriptionChanged,
+      ),
+    );
+  }
+
+  void pointsChanged(String newPoints) {
+    emit(
+      state.copyWith(
+        points: newPoints,
+        status: AddCompletedTaskStatus.pointsChanged,
+      ),
+    );
+  }
+
   Future<void> addCompletedTask() async {
     try {
       emit(state.copyWith(status: AddCompletedTaskStatus.addingTask));
+      final points = _points ?? int.parse(pointsTextController.text);
       await _databaseService.addCompletedTask(
         CompletedTask(
-          description: _description,
-          points: _points,
+          description: _description ?? descriptionTextController.text,
+          points: points,
           date: dateTextController.text,
         ),
       );
       final stringPoints = await _persistentStorageService
           .getString(PersistentStorageService.pointsKey, defaultValue: '0');
-      final points = int.parse(stringPoints);
-      final newPoints = points + _points;
+      final savedPoints = int.parse(stringPoints);
+      final newPoints = savedPoints + points;
       await _persistentStorageService.setString(
         PersistentStorageService.pointsKey,
         newPoints.toString(),

@@ -6,13 +6,29 @@ import 'package:my_productive_rewards/themes/themes.dart';
 import 'package:my_productive_rewards/utils/utils.dart';
 
 class AddCompletedTask extends StatelessWidget {
-  final String description;
-  final int points;
-  const AddCompletedTask({
-    super.key,
-    required this.description,
-    required this.points,
+  final AddCompletedTaskType addCompletedTaskType;
+  final String? description;
+  final int? points;
+
+  const AddCompletedTask._({
+    required this.addCompletedTaskType,
+    this.description,
+    this.points,
   });
+
+  factory AddCompletedTask.normal({
+    required String description,
+    required int points,
+  }) =>
+      AddCompletedTask._(
+        addCompletedTaskType: AddCompletedTaskType.normal,
+        description: description,
+        points: points,
+      );
+
+  factory AddCompletedTask.custom() => AddCompletedTask._(
+        addCompletedTaskType: AddCompletedTaskType.custom,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +51,13 @@ class AddCompletedTask extends StatelessWidget {
               behavior: HitTestBehavior.translucent,
               onTap: () => FocusScope.of(context).unfocus(),
               child: SizedBox(
-                height:
-                    state.status == AddCompletedTaskStatus.failure ? 310 : 285,
+                height: state.status == AddCompletedTaskStatus.failure
+                    ? (addCompletedTaskType == AddCompletedTaskType.normal
+                        ? 300
+                        : 360)
+                    : (addCompletedTaskType == AddCompletedTaskType.normal
+                        ? 285
+                        : 330),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     top: 20,
@@ -47,51 +68,25 @@ class AddCompletedTask extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Add Completed Task',
+                      Text(
+                        addCompletedTaskType == AddCompletedTaskType.normal
+                            ? 'Add Completed Task'
+                            : 'Add Custom Completed Task',
                         style: MPRTextStyles.extraLargeSemiBold,
                       ),
                       const SizedBox(
                         height: 16,
                       ),
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: ColorPalette.platinum.shade500,
-                          border: Border.all(
-                            color: ColorPalette.gunmetal.shade100,
-                            width: 0.5,
-                          ),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 8,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                description,
-                                style: MPRTextStyles.regularSemiBold,
-                              ),
-                              Text(
-                                '${points}pts',
-                                style: MPRTextStyles.regularSemiBold,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      if (addCompletedTaskType == AddCompletedTaskType.normal)
+                        _ReadOnlyDescriptionAndPoints(
+                          description: description!,
+                          points: points!,
+                        )
+                      else
+                        _AddDescriptionAndPoints(),
                       const SizedBox(
-                        height: 16,
+                        height: 22,
                       ),
-                      Text(
-                        'Date',
-                        style:
-                            MPRTextStyles.largeSemiBold.copyWith(fontSize: 15),
-                      ),
-                      const SizedBox(height: 2),
                       _DatePicker(),
                       const SizedBox(height: 16),
                       Padding(
@@ -138,9 +133,98 @@ class _DatePicker extends StatelessWidget with MPRDatePickerMixin {
         contentPadding: EdgeInsets.only(left: 8),
         controller: cubit.dateTextController,
         isEnabled: false,
-        whiteFill: true,
         suffixIconType: SuffixIconType.calendar,
+        disabledFillColor: ColorPalette.platinum.shade200,
+        borderColor: ColorPalette.platinum.shade600,
       ),
     );
   }
+}
+
+class _ReadOnlyDescriptionAndPoints extends StatelessWidget {
+  final String description;
+  final int points;
+  const _ReadOnlyDescriptionAndPoints({
+    required this.description,
+    required this.points,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: ColorPalette.platinum.shade500,
+        border: Border.all(
+          color: ColorPalette.gunmetal.shade100,
+          width: 0.5,
+        ),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 12.0,
+          horizontal: 8,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              description,
+              style: MPRTextStyles.regularSemiBold,
+            ),
+            Text(
+              '${points}pts',
+              style: MPRTextStyles.regularSemiBold,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddDescriptionAndPoints extends StatelessWidget {
+  const _AddDescriptionAndPoints();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AddCompletedTaskCubit>();
+    return Column(
+      children: [
+        SizedBox(
+          height: 42,
+          child: MPRTextField.filledSmall(
+            label: 'Description',
+            controller: cubit.descriptionTextController,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 2,
+              horizontal: 8,
+            ),
+            onChanged: (value) => cubit.descriptionChanged(value),
+          ),
+        ),
+        const SizedBox(
+          height: 22,
+        ),
+        SizedBox(
+          height: 42,
+          child: MPRTextField.filledSmall(
+            label: 'Points',
+            controller: cubit.pointsTextController,
+            keyboardType: TextInputType.number,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 2,
+              horizontal: 8,
+            ),
+            onChanged: (value) => cubit.pointsChanged(value),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+enum AddCompletedTaskType {
+  normal,
+  custom,
 }
