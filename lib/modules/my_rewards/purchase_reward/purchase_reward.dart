@@ -171,7 +171,9 @@ class PurchaseReward extends StatelessWidget {
                         ),
                       ),
                       if (state.status == PurchaseRewardStatus.failure)
-                        MPRFailureText(text: 'Failed to purchase reward'),
+                        MPRFailureText(
+                          text: state.exception ?? 'Failed to purchase reward',
+                        ),
                     ],
                   ),
                 ),

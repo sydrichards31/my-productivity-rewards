@@ -4,22 +4,26 @@ class PurchaseRewardState {
   final PurchaseRewardStatus status;
   final DateTime? selectedDate;
   final String? totalPoints;
+  final String? exception;
 
   const PurchaseRewardState({
     required this.status,
     required this.selectedDate,
     this.totalPoints,
+    this.exception,
   });
 
   PurchaseRewardState copyWith({
     PurchaseRewardStatus? status,
     DateTime? selectedDate,
     String? totalPoints,
+    String? exception,
   }) {
     return PurchaseRewardState(
       status: status ?? this.status,
       selectedDate: selectedDate ?? this.selectedDate,
       totalPoints: totalPoints ?? this.totalPoints,
+      exception: exception ?? this.exception,
     );
   }
 

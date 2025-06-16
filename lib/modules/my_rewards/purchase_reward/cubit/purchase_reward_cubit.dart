@@ -48,6 +48,7 @@ class PurchaseRewardCubit extends Cubit<PurchaseRewardState> {
 
   Future<void> confirmPurchase() async {
     try {
+      late String exception;
       final reward = PurchasedReward(
         description: _reward.description,
         value: _reward.value,
@@ -77,10 +78,25 @@ class PurchaseRewardCubit extends Cubit<PurchaseRewardState> {
           ),
         );
       } else {
-        emit(state.copyWith(status: PurchaseRewardStatus.failure));
+        if (!reward.isInList(rewards)) {
+          exception = 'Reward could not be found in database';
+        } else if (rewards.isNullOrEmpty) {
+          exception = 'No rewards found in database';
+        }
+        emit(
+          state.copyWith(
+            status: PurchaseRewardStatus.failure,
+            exception: exception,
+          ),
+        );
       }
-    } catch (_) {
-      emit(state.copyWith(status: PurchaseRewardStatus.failure));
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: PurchaseRewardStatus.failure,
+          exception: e.toString(),
+        ),
+      );
     }
   }
 
