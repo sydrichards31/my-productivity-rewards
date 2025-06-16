@@ -49,4 +49,5 @@ enum MyRewardsStatus {
   editingReward,
   failure,
   rewardPurchased,
+  tabSelected,
 }

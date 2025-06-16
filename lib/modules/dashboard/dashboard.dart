@@ -176,8 +176,6 @@ class Dashboard extends StatelessWidget {
                   ),
                   SpeedDialChild(
                     onTap: () async {
-                      final dbService = GetIt.I<DatabaseService>();
-                      await dbService.updatePRTable();
                       final result = await showDialog<String?>(
                         context: context,
                         builder: (context) => AddCompletedTask.custom(),

@@ -94,6 +94,7 @@ class MyRewardsCubit extends Cubit<MyRewardsState> {
     emit(
       state.copyWith(
         selectedTab: tab,
+        status: MyRewardsStatus.tabSelected,
       ),
     );
   }
