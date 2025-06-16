@@ -36,6 +36,13 @@ class DatabaseService {
     );
   }
 
+  Future<void> updatePRTable() async {
+    await database.execute('DROP TABLE IF EXISTS PurchasedRewards');
+    await database.execute(
+      'CREATE TABLE PurchasedRewards (id INTEGER PRIMARY KEY, description TEXT, value INTEGER, link TEXT, date TEXT)',
+    );
+  }
+
   // TASKS //
   Future<void> addTask(Task task) async {
     await database.transaction((txn) async {

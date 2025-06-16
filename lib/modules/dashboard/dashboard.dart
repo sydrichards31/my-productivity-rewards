@@ -11,6 +11,7 @@ import 'package:my_productive_rewards/modules/dashboard/cubit/dashboard_cubit.da
 import 'package:my_productive_rewards/modules/dashboard/edit_task/edit_task.dart';
 import 'package:my_productive_rewards/modules/settings/settings.dart';
 import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
+import 'package:my_productive_rewards/services/database_service.dart';
 import 'package:my_productive_rewards/services/feature_flag_service.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 
@@ -175,6 +176,8 @@ class Dashboard extends StatelessWidget {
                   ),
                   SpeedDialChild(
                     onTap: () async {
+                      final dbService = GetIt.I<DatabaseService>();
+                      await dbService.updatePRTable();
                       final result = await showDialog<String?>(
                         context: context,
                         builder: (context) => AddCompletedTask.custom(),
