@@ -11,7 +11,6 @@ import 'package:my_productive_rewards/modules/dashboard/cubit/dashboard_cubit.da
 import 'package:my_productive_rewards/modules/dashboard/edit_task/edit_task.dart';
 import 'package:my_productive_rewards/modules/settings/settings.dart';
 import 'package:my_productive_rewards/modules/tabs/cubit/bottom_tabs_cubit.dart';
-import 'package:my_productive_rewards/services/database_service.dart';
 import 'package:my_productive_rewards/services/feature_flag_service.dart';
 import 'package:my_productive_rewards/themes/themes.dart';
 
@@ -42,7 +41,28 @@ class Dashboard extends StatelessWidget {
           } else if (state.status == DashboardStatus.failure) {
             bodyWidget = Center(child: Text('Unable to load data'));
           } else if (state.tasks.isEmpty) {
-            bodyWidget = Center(child: Text('No tasks saved'));
+            bodyWidget = Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No tasks saved',
+                      style: MPRTextStyles.largeSemiBold,
+                    ),
+                    SizedBox(height: 4),
+                    Center(
+                      child: Text(
+                        'To add a new task, press the plus button in the bottom right and select Add New Task.',
+                        style: MPRTextStyles.regular,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           } else {
             bodyWidget = Column(
               crossAxisAlignment: CrossAxisAlignment.start,

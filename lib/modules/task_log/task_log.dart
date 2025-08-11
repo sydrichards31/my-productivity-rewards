@@ -25,9 +25,25 @@ class TaskLog extends StatelessWidget {
             bodyWidget = Center(child: Text('Unable to load data'));
           } else if (state.tasks.isEmpty) {
             bodyWidget = Center(
-              child: Text(
-                'No tasks recorded',
-                style: MPRTextStyles.large,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No tasks recorded',
+                      style: MPRTextStyles.largeSemiBold,
+                    ),
+                    SizedBox(height: 4),
+                    Center(
+                      child: Text(
+                        'To record a completed task, first add a task to the dashboard and then press the plus button to log the date it was completed.',
+                        style: MPRTextStyles.regular,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           } else {

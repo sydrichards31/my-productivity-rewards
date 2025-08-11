@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:my_productive_rewards/modules/daily_checklist.dart/daily_checklist_item.dart';
-import 'package:my_productive_rewards/services/database_service.dart';
-import 'package:my_productive_rewards/services/persistent_storage_service.dart';
 
 part 'daily_checklist_state.dart';
 
 final dateFormat = DateFormat('EEE, MMMM dd, yyyy');
 
 class DailyChecklistCubit extends Cubit<DailyChecklistState> {
-  final DatabaseService _databaseService = GetIt.I<DatabaseService>();
-  final PersistentStorageService _persistentStorageService =
-      GetIt.I<PersistentStorageService>();
+  // final DatabaseService _databaseService = GetIt.I<DatabaseService>();
+  // final PersistentStorageService _persistentStorageService =
+  //     GetIt.I<PersistentStorageService>();
   final descriptionTextController = TextEditingController();
   final valueTextController = TextEditingController();
   final linkTextController = TextEditingController();

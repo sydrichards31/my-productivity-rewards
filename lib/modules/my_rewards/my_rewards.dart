@@ -44,9 +44,25 @@ class Rewards extends StatelessWidget {
               state.rewards.isEmpty &&
               state.purchasedRewards.isEmpty) {
             bodyWidget = Center(
-              child: Text(
-                'No rewards saved',
-                style: MPRTextStyles.large,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'No rewards saved',
+                      style: MPRTextStyles.largeSemiBold,
+                    ),
+                    SizedBox(height: 4),
+                    Center(
+                      child: Text(
+                        'To add a new reward, press the plus button in the bottom right.',
+                        style: MPRTextStyles.regular,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           } else if (state.status != MyRewardsStatus.loading &&
