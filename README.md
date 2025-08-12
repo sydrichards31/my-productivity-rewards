@@ -26,3 +26,7 @@ All data is stored locally on the device using SQFLite. Data can be manually cle
 ```
 4. Run the app on your desired platform (for iOS ensure Xcode is installed):
    ``` flutter run ```
+
+## Screenshots
+<img src="images/dashboard.png" width="200px" /> <img src="images/taskLog.png" width="200px" /> <img src="images/rewards.png" width="200px" />
+
