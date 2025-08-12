@@ -8,9 +8,6 @@ part 'daily_checklist_state.dart';
 final dateFormat = DateFormat('EEE, MMMM dd, yyyy');
 
 class DailyChecklistCubit extends Cubit<DailyChecklistState> {
-  // final DatabaseService _databaseService = GetIt.I<DatabaseService>();
-  // final PersistentStorageService _persistentStorageService =
-  //     GetIt.I<PersistentStorageService>();
   final descriptionTextController = TextEditingController();
   final valueTextController = TextEditingController();
   final linkTextController = TextEditingController();
